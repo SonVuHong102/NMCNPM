@@ -5,6 +5,7 @@
  */
 package view;
 
+import dao.ClientStatDAO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
@@ -14,8 +15,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.User;
 
@@ -151,6 +150,8 @@ public class ClientStatFrm extends javax.swing.JFrame implements ActionListener 
 	
 	private void btnStatClick() {
 		try {
+			txtSD.setText("30/04/2021"); //TEST
+			txtED.setText("15/05/2021"); //TEST
 			SimpleDateFormat fm = new SimpleDateFormat("dd/MM/yyyy");
 			Date sd = fm.parse(txtSD.getText());
 			LocalDate.parse(fm.format(sd),
@@ -165,7 +166,8 @@ public class ClientStatFrm extends javax.swing.JFrame implements ActionListener 
 						, "Warring", JOptionPane.WARNING_MESSAGE);
 				return;
 			}
-			
+			ClientStatDAO cd = new ClientStatDAO();
+			cd.searchClientStat(sd,ed);
 		} catch (IllegalArgumentException | ParseException e) {
 			JOptionPane.showMessageDialog(this, "Lỗi định dạng ngày"
 						, "Warring", JOptionPane.WARNING_MESSAGE);
