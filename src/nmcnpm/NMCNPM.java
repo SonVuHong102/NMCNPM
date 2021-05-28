@@ -5,7 +5,8 @@
  */
 package nmcnpm;
 
-import dao.DAO;
+import model.User;
+import view.ClientStatFrm;
 
 /**
  *
@@ -13,6 +14,7 @@ import dao.DAO;
  */
 public class NMCNPM {
 	public static void main(String[] args) {
-		new DAO();
+		User u = new User("manager","manager","manager","manager");
+		new ClientStatFrm(u);
 	}
 }

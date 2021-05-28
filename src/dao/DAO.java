@@ -17,7 +17,7 @@ public class DAO {
 	
 	public DAO() {
 		if(con == null) {
-			String dbUrl = "jdbc:mysql://localhost:3306/nmcnpm?autoReconnect=true&useSSL=false";
+			String dbUrl = "jdbc:mysql://localhost:3306/nmcnpm?autoReconnect=true";
 			String dbClass = "com.mysql.cj.jdbc.Driver";
 			try {
 				Class.forName(dbClass);
