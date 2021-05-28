@@ -18,12 +18,6 @@ public class ClientStat extends Client {
 		super();
 	}
 
-	public ClientStat(int total_rent_time, int total_rent_day, float total_income) {
-		this.total_rent_time = total_rent_time;
-		this.total_rent_day = total_rent_day;
-		this.total_income = total_income;
-	}
-
 	public int getTotal_rent_time() {
 		return total_rent_time;
 	}

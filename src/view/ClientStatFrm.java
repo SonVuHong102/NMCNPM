@@ -94,9 +94,9 @@ public class ClientStatFrm extends javax.swing.JFrame implements ActionListener 
                     .addGroup(layout.createSequentialGroup()
                         .addGap(72, 72, 72)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
-                        .addGap(70, 70, 70)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(62, 62, 62)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtED, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtSD, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -154,11 +154,11 @@ public class ClientStatFrm extends javax.swing.JFrame implements ActionListener 
 			SimpleDateFormat fm = new SimpleDateFormat("dd/MM/yyyy");
 			Date sd = fm.parse(txtSD.getText());
 			LocalDate.parse(fm.format(sd),
-                    DateTimeFormatter.ofPattern("uuuu-M-d")
+                    DateTimeFormatter.ofPattern("dd/MM/uuuu")
                             .withResolverStyle(ResolverStyle.STRICT));
 			Date ed = fm.parse(txtED.getText());
 			LocalDate.parse(fm.format(ed),
-                    DateTimeFormatter.ofPattern("uuuu-M-d")
+                    DateTimeFormatter.ofPattern("dd/MM/uuuu")
                             .withResolverStyle(ResolverStyle.STRICT));
 			if(ed.before(sd)) {
 				JOptionPane.showMessageDialog(this, "Ngày kết thúc nằm trước ngày bắt đầu"
