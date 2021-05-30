@@ -26,25 +26,21 @@ public class ClientStatDAO extends DAO {
 	
 	public static List<ClientStat> searchClientStat(Date sd, Date ed) {
 		List<ClientStat> list = new ArrayList<ClientStat>();
-		String query = 
-				"SELECT e.id, e.name,e.address,e.email,e.tel,e.note,\n" +
-				"	(SELECT c.times FROM\n" +
-				"		((SELECT b.idclient, COUNT(b.id) as times\n" +
-				"		FROM tblcontract b\n" +
-				"		WHERE b.id IN (\n" +
-				"			SELECT a.idcontract \n" +
-				"			FROM tblbookedcar a \n" +
-				"			WHERE a.checkin > ? AND a.checkout < ?)\n" +
-				"		GROUP BY b.idclient) ) c\n" +
-				"    WHERE c.idclient = e.id) as total_rent_time\n" +
-				"FROM tblclient e"; // add sth
+		String query = "SELECT a.*, (SELECT SUM(DATEDIFF(LEAST(c.checkout, ?), GREATEST(c.checkin, ?))) FROM tblbookedcar c, tblcontract b WHERE c.idcontract = b.id AND b.idclient = a.id AND c.checkout < ? AND c.checkin > ? GROUP BY b.iduser) as total_rent_day, (SELECT COUNT(c.idcontract) FROM tblbookedcar c, tblcontract b WHERE c.checkin > ? AND c.checkout < ? AND c.idcontract = b.id AND b.idclient = a.id) as total_rent_time, (SELECT SUM(DATEDIFF(LEAST(c.checkout, ?), GREATEST(c.checkin, ?))*c.price) FROM tblbookedcar c, tblcontract b WHERE c.idcontract = b.id AND b.idclient = a.id AND c.checkout < ? AND c.checkin > ? GROUP BY b.iduser) as total_income FROM tblclient a GROUP BY a.id ORDER BY total_income DESC, total_rent_day DESC";
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
          
         try {
             PreparedStatement ps = con.prepareStatement(query);
-            ps.setString(1, sdf.format(sd));
-            ps.setString(2, sdf.format(ed));
-
+            ps.setString(1, sdf.format(ed));
+            ps.setString(2, sdf.format(sd));
+			ps.setString(3, sdf.format(ed));
+            ps.setString(4, sdf.format(sd));
+			ps.setString(5, sdf.format(sd));
+            ps.setString(6, sdf.format(ed));
+			ps.setString(7, sdf.format(ed));
+            ps.setString(8, sdf.format(sd));
+			ps.setString(9, sdf.format(ed));
+            ps.setString(10, sdf.format(sd));
             ResultSet rs = ps.executeQuery();
              
             while(rs.next()) {
@@ -55,8 +51,9 @@ public class ClientStatDAO extends DAO {
                 r.setEmail(rs.getString("email"));
                 r.setTel(rs.getString("tel"));
                 r.setNote(rs.getString("note"));
+				r.setTotal_rent_day(rs.getInt("total_rent_day"));
 				r.setTotal_rent_time(rs.getInt("total_rent_time"));
-				System.out.println(r.getTotal_rent_time());
+				r.setTotal_income(rs.getInt("total_income"));
                 list.add(r);
             }           
         }catch(Exception e) {

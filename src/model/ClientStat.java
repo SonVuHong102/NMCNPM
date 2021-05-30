@@ -42,6 +42,10 @@ public class ClientStat extends Client {
 		this.total_income = total_income;
 	}
 	
-	
-	
+	public Object[] toObject() {
+		return new Object[] {
+			this.getId(), this.getName(), this.getAddress(), this.getEmail(), this.getTel(), this.total_rent_time,
+			this.total_rent_day, this.total_income
+		};
+	}
 }

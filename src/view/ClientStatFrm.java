@@ -15,7 +15,12 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.util.Date;
+import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+import model.ClientStat;
 import model.User;
 
 /**
@@ -28,7 +33,7 @@ public class ClientStatFrm extends javax.swing.JFrame implements ActionListener 
 	 * Creates new form ClientStatFrm
 	 */
 	private User user;
-	
+
 	public ClientStatFrm(User user) {
 		setTitle("Xem Thống kê");
 		setResizable(false);
@@ -88,9 +93,6 @@ public class ClientStatFrm extends javax.swing.JFrame implements ActionListener 
                         .addGap(28, 28, 28)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 568, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(247, 247, 247)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(72, 72, 72)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
@@ -101,7 +103,10 @@ public class ClientStatFrm extends javax.swing.JFrame implements ActionListener 
                             .addComponent(txtSD, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(229, 229, 229)
-                        .addComponent(btnStat, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnStat, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(183, 183, 183)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(23, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -143,37 +148,52 @@ public class ClientStatFrm extends javax.swing.JFrame implements ActionListener 
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getActionCommand().equals("btnStat")) {
+		if (e.getActionCommand().equals("btnStat")) {
 			btnStatClick();
 		}
 	}
-	
+
 	private void btnStatClick() {
 		try {
-			txtSD.setText("30/04/2021"); //TEST
-			txtED.setText("15/05/2021"); //TEST
 			SimpleDateFormat fm = new SimpleDateFormat("dd/MM/yyyy");
 			Date sd = fm.parse(txtSD.getText());
 			LocalDate.parse(fm.format(sd),
-                    DateTimeFormatter.ofPattern("dd/MM/uuuu")
-                            .withResolverStyle(ResolverStyle.STRICT));
+					DateTimeFormatter.ofPattern("dd/MM/uuuu")
+							.withResolverStyle(ResolverStyle.STRICT));
 			Date ed = fm.parse(txtED.getText());
 			LocalDate.parse(fm.format(ed),
-                    DateTimeFormatter.ofPattern("dd/MM/uuuu")
-                            .withResolverStyle(ResolverStyle.STRICT));
-			if(ed.before(sd)) {
-				JOptionPane.showMessageDialog(this, "Ngày kết thúc nằm trước ngày bắt đầu"
-						, "Warring", JOptionPane.WARNING_MESSAGE);
+					DateTimeFormatter.ofPattern("dd/MM/uuuu")
+							.withResolverStyle(ResolverStyle.STRICT));
+			if (ed.before(sd)) {
+				JOptionPane.showMessageDialog(this, "Ngày kết thúc nằm trước ngày bắt đầu",
+						 "Warring", JOptionPane.WARNING_MESSAGE);
 				return;
 			}
+			jLabel4.setText(" Ngày thống kê : " + fm.format(sd) + " -> " + fm.format(ed));
+			DefaultTableModel model = (DefaultTableModel) tblStat.getModel();
+			model.setRowCount(0);
+			tblStat.setModel(model);
 			ClientStatDAO cd = new ClientStatDAO();
-			cd.searchClientStat(sd,ed);
+			List<ClientStat> list = cd.searchClientStat(sd, ed);
+			for (ClientStat ct : list) {
+				if (ct.getTotal_income() == 0.0) {
+					continue;
+				}
+				model.addRow(ct.toObject());
+			}
+			tblStat.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+				public void valueChanged(ListSelectionEvent event) {
+					int ct = tblStat.getSelectedRow();
+					new ClientDetailFrm(user,list.get(ct),sd,ed);
+					dispose();
+				}
+			});
 		} catch (IllegalArgumentException | ParseException e) {
-			JOptionPane.showMessageDialog(this, "Lỗi định dạng ngày"
-						, "Warring", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Lỗi định dạng ngày",
+					 "Warring", JOptionPane.WARNING_MESSAGE);
 		} catch (DateTimeParseException e) {
-			JOptionPane.showMessageDialog(this, "Ngày không tồn tại hoặc ngoài khả năng thống kê"
-						, "Warring", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Ngày không tồn tại hoặc ngoài khả năng thống kê",
+					 "Warring", JOptionPane.WARNING_MESSAGE);
 		}
 	}
 }
