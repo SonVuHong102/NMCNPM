@@ -6,6 +6,7 @@
 package model;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -17,6 +18,9 @@ public class Bill implements Serializable {
 	private String name;
 	private Date payment_date;
 	private String payment_type;
+	private int total_car_rent;
+	private float total_rent_money;
+	private float total_pen;
 	private float total;
 	private User user;
 	private Contract contract;
@@ -90,6 +94,42 @@ public class Bill implements Serializable {
 	public void setContract(Contract contract) {
 		this.contract = contract;
 	}
+
+	public int getTotal_car_rent() {
+		return total_car_rent;
+	}
+
+	public void setTotal_car_rent(int total_car_rent) {
+		this.total_car_rent = total_car_rent;
+	}
+
+	public float getTotal_rent_money() {
+		return total_rent_money;
+	}
+
+	public void setTotal_rent_money(float total_rent_money) {
+		this.total_rent_money = total_rent_money;
+	}
+
+	public float getTotal_pen() {
+		return total_pen;
+	}
+
+	public void setTotal_pen(float total_pen) {
+		this.total_pen = total_pen;
+	}
 	
-	
+	public Object[] toObject() {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		return new Object[] {
+			this.id,
+			this.contract.getClient().getName(),
+			sdf.format(this.contract.getBookedCar().get(0).getCheckin()),
+			sdf.format(this.contract.getBookedCar().get(0).getCheckout()),
+			this.total_car_rent,
+			this.total_rent_money,
+			this.total_pen,
+			this.total
+		};
+	}
 }

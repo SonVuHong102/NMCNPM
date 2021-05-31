@@ -5,7 +5,7 @@
  */
 package nmcnpm;
 
-import dao.DAO;
+import view.LoginFrm;
 
 /**
  *
@@ -13,6 +13,6 @@ import dao.DAO;
  */
 public class NMCNPM {
 	public static void main(String[] args) {
-		new DAO();
+		new LoginFrm();
 	}
 }
