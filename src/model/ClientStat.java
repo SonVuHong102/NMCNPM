@@ -5,11 +5,13 @@
  */
 package model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Son Vu
  */
-public class ClientStat extends Client {
+public class ClientStat extends Client implements Serializable {
 	private int total_rent_time;
 	private int total_rent_day;
 	private float total_income;
@@ -17,6 +19,14 @@ public class ClientStat extends Client {
 	public ClientStat() {
 		super();
 	}
+
+	public ClientStat(int total_rent_time, int total_rent_day, float total_income, String name, String address, String email, String tel, String note) {
+		super(name, address, email, tel, note);
+		this.total_rent_time = total_rent_time;
+		this.total_rent_day = total_rent_day;
+		this.total_income = total_income;
+	}
+	
 
 	public int getTotal_rent_time() {
 		return total_rent_time;

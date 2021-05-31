@@ -6,7 +6,6 @@
 package model;
 
 import java.io.Serializable;
-import javax.swing.JPasswordField;
 
 /**
  *

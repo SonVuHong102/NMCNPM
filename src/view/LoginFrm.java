@@ -17,9 +17,6 @@ import model.User;
  */
 public class LoginFrm extends javax.swing.JFrame implements ActionListener {
 
-	/**
-	 * Creates new form LoginFrm
-	 */
 	public LoginFrm() {
 		setTitle("Đăng nhập Thống kê");
 		setResizable(false);

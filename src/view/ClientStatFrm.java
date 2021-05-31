@@ -10,10 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.time.format.ResolverStyle;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -42,6 +39,8 @@ public class ClientStatFrm extends javax.swing.JFrame implements ActionListener 
 		this.user = user;
 		btnStat.addActionListener(this);
 		btnStat.setActionCommand("btnStat");
+		txtSD.setText("30/04/2021");
+		txtED.setText("30/05/2021");
 		setVisible(true);
 	}
 
