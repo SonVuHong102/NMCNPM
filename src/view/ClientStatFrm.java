@@ -63,9 +63,9 @@ public class ClientStatFrm extends javax.swing.JFrame implements ActionListener 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Thống kê Khách Hàng");
 
-        jLabel2.setText("Ngày bắt đầu (DD/MM/YYYY) :");
+        jLabel2.setText("Ngày bắt đầu (dd/MM/yyyy) :");
 
-        jLabel3.setText("Ngày kết thúc (DD/MM/YYYY) : ");
+        jLabel3.setText("Ngày kết thúc (dd/MM/yyyy) : ");
 
         btnStat.setText("Xác nhận");
 
@@ -87,9 +87,6 @@ public class ClientStatFrm extends javax.swing.JFrame implements ActionListener 
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(122, 122, 122)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(28, 28, 28)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 568, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
@@ -106,7 +103,10 @@ public class ClientStatFrm extends javax.swing.JFrame implements ActionListener 
                         .addComponent(btnStat, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(183, 183, 183)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(122, 122, 122)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(23, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -156,14 +156,9 @@ public class ClientStatFrm extends javax.swing.JFrame implements ActionListener 
 	private void btnStatClick() {
 		try {
 			SimpleDateFormat fm = new SimpleDateFormat("dd/MM/yyyy");
+			fm.setLenient(false);
 			Date sd = fm.parse(txtSD.getText());
-			LocalDate.parse(fm.format(sd),
-					DateTimeFormatter.ofPattern("dd/MM/uuuu")
-							.withResolverStyle(ResolverStyle.STRICT));
 			Date ed = fm.parse(txtED.getText());
-			LocalDate.parse(fm.format(ed),
-					DateTimeFormatter.ofPattern("dd/MM/uuuu")
-							.withResolverStyle(ResolverStyle.STRICT));
 			if (ed.before(sd)) {
 				JOptionPane.showMessageDialog(this, "Ngày kết thúc nằm trước ngày bắt đầu",
 						 "Warring", JOptionPane.WARNING_MESSAGE);
@@ -175,6 +170,14 @@ public class ClientStatFrm extends javax.swing.JFrame implements ActionListener 
 			tblStat.setModel(model);
 			ClientStatDAO cd = new ClientStatDAO();
 			List<ClientStat> list = cd.searchClientStat(sd, ed);
+			if(list.get(0).getTotal_income()==0) {
+				int choose = JOptionPane.showOptionDialog(this, "Stat list is Empty ! Do you want to go back ?", "Info", 
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, EXIT_ON_CLOSE);
+				if(choose == 0) {
+					new ManagerHomeFrm(user);
+					this.dispose();
+				}
+			}
 			for (ClientStat ct : list) {
 				if (ct.getTotal_income() == 0.0) {
 					continue;
