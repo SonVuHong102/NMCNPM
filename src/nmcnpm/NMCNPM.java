@@ -5,8 +5,7 @@
  */
 package nmcnpm;
 
-import model.User;
-import view.ClientStatFrm;
+import view.LoginFrm;
 
 /**
  *
@@ -14,7 +13,6 @@ import view.ClientStatFrm;
  */
 public class NMCNPM {
 	public static void main(String[] args) {
-		User u = new User("manager","manager","manager","manager");
-		new ClientStatFrm(u);
+		new LoginFrm();
 	}
 }
