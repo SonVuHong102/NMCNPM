@@ -11,7 +11,7 @@ import view.LoginFrm;
  *
  * @author Son Vu
  */
-public class NMCNPM {
+public class Main {
 	public static void main(String[] args) {
 		new LoginFrm();
 	}
