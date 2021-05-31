@@ -155,8 +155,6 @@ public class ClientStatFrm extends javax.swing.JFrame implements ActionListener 
 
 	private void btnStatClick() {
 		try {
-			txtSD.setText("30/04/2021"); //DEBUG
-			txtED.setText("15/05/2021"); //DEBUG
 			SimpleDateFormat fm = new SimpleDateFormat("dd/MM/yyyy");
 			Date sd = fm.parse(txtSD.getText());
 			LocalDate.parse(fm.format(sd),

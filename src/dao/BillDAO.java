@@ -93,7 +93,6 @@ public class BillDAO extends DAO {
 					for(Compensation c : bc.getCompensation()) {
 						temp1+=(c.getPenalty() + c.getBreakdown().getValue());
 					}
-					System.out.println(bc.getPrice());
 					temp2+=(bc.getPrice()*(bc.getCheckout().getTime()-bc.getCheckin().getTime())/86400000);
 				}
 				rBill.setTotal_pen(temp1);
